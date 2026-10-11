@@ -16,7 +16,16 @@ ENV_FILE = APP_DIR / ".env"
 MODEL_DIR = APP_DIR / "models"
 load_dotenv(dotenv_path=ENV_FILE, override=True)
 
-MODEL_NAME = os.getenv("GEMINI_MODEL", "gemini-3.5-flash").strip()
+def get_model_name():
+    try:
+        if "GEMINI_MODEL" in st.secrets:
+            return str(st.secrets["GEMINI_MODEL"]).strip()
+    except Exception:
+        pass
+    return os.getenv("GEMINI_MODEL", "gemini-3.5-flash").strip()
+
+
+MODEL_NAME = get_model_name()
 
 st.set_page_config(page_title="MedVision AI", page_icon="🩺", layout="wide")
 
@@ -32,9 +41,15 @@ LANGUAGES = {
 
 
 def get_api_key():
-    """Read the Gemini API key from the project's .env file."""
+    """Read the Gemini API key from Streamlit secrets or .env file."""
+    try:
+        if "GEMINI_API_KEY" in st.secrets:
+            return str(st.secrets["GEMINI_API_KEY"]).strip()
+    except Exception:
+        pass
     load_dotenv(dotenv_path=ENV_FILE, override=True)
     return os.getenv("GEMINI_API_KEY", "").strip()
+
 
 
 def get_specialist_model_path(specialist_name):
