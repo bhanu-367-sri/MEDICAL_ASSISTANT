@@ -4,3 +4,4 @@ google-genai>=1.0.0
 python-dotenv>=1.0.1
 Pillow>=10.0.0
 gTTS>=2.5.0
+opencv-python-headless
